@@ -1,0 +1,68 @@
+version: '2'
+services:
+
+  #NAS1
+  nas1: 
+    build: .
+    image: nas
+    privileged: true
+    command: /bin/bash -c "sleep 100000"
+    expose:
+      - "24007/tcp"
+      - "24008/tcp"
+      - "24007/udp"
+      - "24008/udp"
+      - "49152/tcp"
+      - "49152/udp"
+      - "38465-38467/tcp"
+      - "38465-38467/udp"
+      - "111/tcp"
+      - "111/udp"
+    networks:
+      - LAN4
+
+  #NAS2
+  nas2: 
+    build: .
+    image: nas
+    privileged: true
+    command: /bin/bash -c "sleep 100000" 
+    expose:
+      - "24007/tcp"
+      - "24008/tcp"
+      - "24007/udp"
+      - "24008/udp"
+      - "49153/tcp"
+      - "49153/udp"
+      - "38465-38467/tcp"
+      - "38465-38467/udp"
+      - "111/tcp"
+      - "111/udp"
+    networks:
+      - LAN4
+
+
+  #NAS3
+  nas3: 
+    build: .
+    image: nas
+    privileged: true
+    command: /bin/bash -c "sleep 100000"
+    expose:
+      - "24007/tcp"
+      - "24008/tcp"
+      - "24007/udp"
+      - "24008/udp"
+      - "49154/tcp"
+      - "49154/udp"
+      - "38465-38467/tcp"
+      - "38465-38467/udp"
+      - "111/tcp"
+      - "111/udp"
+    networks:
+      - LAN4
+
+networks:
+  LAN4:
+
+  

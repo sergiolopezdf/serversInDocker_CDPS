@@ -1,0 +1,38 @@
+# DB Migration
+docker exec docker_s1_1 npm run-script migrate_local; 
+docker exec docker_s1_1 npm run-script seed_local;  
+
+# NAS
+docker exec docker_nas1_1 service glusterfs-server start;
+docker exec docker_nas2_1 service glusterfs-server start;
+docker exec docker_nas3_1 service glusterfs-server start;
+
+docker exec docker_nas1_1 gluster peer probe 10.1.4.22;
+docker exec docker_nas1_1 gluster peer probe 10.1.4.23;
+
+docker exec docker_nas2_1 gluster peer probe 10.1.4.21;
+docker exec docker_nas2_1 gluster peer probe 10.1.4.23;
+
+
+docker exec docker_nas3_1 gluster peer probe 10.1.4.21; 
+docker exec docker_nas3_1 gluster peer probe 10.1.4.22; 
+
+
+docker exec docker_nas3_1 gluster volume create nas replica 3 10.1.4.21:/nas 10.1.4.22:/nas 10.1.4.23:/nas force; 
+docker exec docker_nas3_1 gluster volume start nas; 
+docker exec docker_nas3_1 gluster volume set nas network.ping-timeout 5; 
+
+
+docker exec docker_s1_1 mkdir public/uploads
+docker exec docker_s1_1 mount -t glusterfs 10.1.4.21:/nas /CRM_2017/public/uploads
+
+docker exec docker_s2_1 mkdir public/uploads
+docker exec docker_s2_1 mount -t glusterfs 10.1.4.22:/nas /CRM_2017/public/uploads
+
+docker exec docker_s3_1 mkdir public/uploads
+docker exec docker_s3_1 mount -t glusterfs 10.1.4.23:/nas /CRM_2017/public/uploads
+
+#FW
+docker exec docker_lb_1 ufw enable;
+docker exec docker_lb_1 ufw allow 80;
+docker exec docker_lb_1 ufw default deny incoming;
